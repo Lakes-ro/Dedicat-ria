@@ -1,0 +1,335 @@
+/* Importação de fontes para um toque mais romântico */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;700&display=swap');
+
+:root {
+    --primary-color: #ff6b6b; /* Rosa avermelhado suave */
+    --secondary-color: #ffb8b8; /* Rosa claro */
+    --text-color: #4a4a4a; /* Cinza escuro para texto */
+    --light-text-color: #6a6a6a; /* Cinza um pouco mais claro */
+    --bg-color: #fcebeb; /* Fundo rosa bem suave */
+    --card-bg: #ffffff; /* Fundo do cartão branco */
+    --border-color: #ffdada; /* Borda suave */
+    --shadow-color: rgba(0, 0, 0, 0.08);
+}
+
+body {
+    font-family: 'Lora', serif; /* Fonte serifada para um toque clássico e romântico */
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-color);
+}
+
+.profile-card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    padding: 30px;
+    max-width: 600px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+/* Efeito sutil de brilho no fundo do card */
+.profile-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
+    opacity: 0.15;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: -1;
+}
+
+.profile-card::after {
+    content: '';
+    position: absolute;
+    bottom: -50px;
+    right: -50px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    opacity: 0.1;
+    border-radius: 50%;
+    filter: blur(35px);
+    z-index: -1;
+}
+
+.profile-header {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    box-shadow: 0 0 0 8px var(--secondary-color); /* Anel externo */
+    margin-bottom: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+}
+
+.profile-name {
+    font-family: 'Playfair Display', serif; /* Fonte elegante para o nome */
+    font-size: 2.8em;
+    color: var(--primary-color);
+    margin: 10px 0 5px;
+    letter-spacing: 0.5px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.profile-tagline {
+    font-size: 1.1em;
+    color: var(--light-text-color);
+    font-style: italic;
+    margin-top: 0;
+}
+
+.profile-details {
+    text-align: left;
+    margin-bottom: 30px;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 25px;
+}
+
+.profile-details p {
+    margin: 12px 0;
+    font-size: 1.1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+}
+
+.detail-label {
+    color: var(--primary-color);
+    margin-right: 8px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.detail-value {
+    color: var(--text-color);
+}
+
+.profile-bio {
+    background-color: #fff5f5; /* Fundo suave para a bio */
+    border-left: 5px solid var(--primary-color);
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-top: 25px;
+    font-size: 1.05em;
+    color: var(--text-color);
+    line-height: 1.8;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.profile-footer {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--border-color);
+}
+
+.action-button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.05em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    font-family: 'Lora', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.action-button:hover {
+    background-color: #e04a4a; /* Tom mais escuro no hover */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.action-button.secondary {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: none;
+}
+
+.action-button.secondary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Responsividade básica */
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .profile-name {
+        font-size: 2.2em;
+    }
+
+    .profile-picture {
+        width: 120px;
+        height: 120px;
+    }
+
+    .action-button {
+        padding: 10px 20px;
+        font-size: 1em;
+    }
+
+    .profile-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Estilos adicionais para funcionalidades JavaScript */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.gallery-item {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, var(--bg-color), var(--secondary-color));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    border: 2px solid var(--border-color);
+}
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    border-color: var(--primary-color);
+}
+
+.message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.message-form input,
+.message-form textarea {
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Lora', serif;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.message-form input:focus,
+.message-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.message-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.floating-hearts {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999;
+    color: var(--primary-color);
+    font-size: 20px;
+    animation: floatUp 3s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(360deg);
+    }
+}
+
