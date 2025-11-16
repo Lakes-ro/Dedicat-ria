@@ -347,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.style.backgroundColor = '#27ae60';
             
             setTimeout(() => {
-                showSuccessMessage(`Obrigada pela mensagem, ${name}! 💕 Sua mensagem foi salva e pode ser vista por outros visitantes.`);
+                showSuccessMessage(`Obrigada pela mensagem! 💕 Sua mensagem foi salva e pode ser vista por outros visitantes.`);
                 document.querySelector('.modal').style.display = 'none';
             }, 1500);
         }, 2000);
@@ -700,5 +700,6 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
