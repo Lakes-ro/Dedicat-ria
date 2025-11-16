@@ -27,10 +27,10 @@ const GALLERY_CONFIG = {
             description: "Os lugares que marcaram nossa história de amor...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                 "imagens/lugares/l (1).jpeg",
-                 "imagens/lugares/l (2).jpeg",
-                 "imagens/lugares/l (3).jpeg",
-                 "imagens/lugares/l (4).jpeg",
+                 "l (1).jpeg",
+                 "l (2).jpeg",
+                 "l (3).jpeg",
+                 "l (4).jpeg",
             ]
         },
         {
@@ -72,8 +72,8 @@ const GALLERY_CONFIG = {
             description: "Palavras de amor que guardamos no coração...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                // "imagens/carta1.jpg",
-                // "imagens/carta2.jpg"
+                 "imagens/carta1.jpg",
+                 "imagens/carta2.jpg"
             ]
         },
         {
@@ -700,4 +700,5 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
