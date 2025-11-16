@@ -13,12 +13,12 @@ const GALLERY_CONFIG = {
             description: "Aqui estão nossos momentos mais especiais juntos...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                "imagens/momentos/m (1).jpeg",
-                "imagens/momentos/m (2).jpeg",
-                "imagens/momentos/m (3).jpeg",
-                "imagens/momentos/m (4).jpeg",
-                "imagens/momentos/m (5).jpeg",
-                "imagens/momentos/m (6).jpeg"
+                "m (1).jpeg",
+                "m (2).jpeg",
+                "m (3).jpeg",
+                "m (4).jpeg",
+                "m (5).jpeg",
+                "m (6).jpeg"
             ]
         },
         {
@@ -41,13 +41,13 @@ const GALLERY_CONFIG = {
                 // ADICIONE SUAS IMAGENS AQUI:
                  
                  
-                 "imagens/musicas/mu (1).jpeg",
-                 "imagens/musicas/mu (2).jpeg",
-                 "imagens/musicas/mu (3).jpeg",
-                 "imagens/musicas/mu (4).jpeg",
-                 "imagens/musicas/mu (5).jpeg",
-                 "imagens/musicas/mu (6).jpeg",
-                 "imagens/musicas/mu (7).jpeg"
+                 "mu (1).jpeg",
+                 "mu (2).jpeg",
+                 "mu (3).jpeg",
+                 "mu (4).jpeg",
+                 "mu (5).jpeg",
+                 "mu (6).jpeg",
+                 "mu (7).jpeg"
 
             ]
         },
@@ -57,13 +57,13 @@ const GALLERY_CONFIG = {
             description: "Nossas memórias capturadas em imagens...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                 "imagens/juntos/j (1).jpeg",
-                 "imagens/juntos/j (2).jpeg",
-                 "imagens/juntos/j (3).jpeg",
-                 "imagens/juntos/j (4).jpeg",
-                 "imagens/juntos/j (5).jpeg",
-                 "imagens/juntos/j (6).jpeg",
-                 "imagens/juntos/j (7).jpeg",
+                 "j (1).jpeg",
+                 "j (2).jpeg",
+                 "j (3).jpeg",
+                 "j (4).jpeg",
+                 "j (5).jpeg",
+                 "j (6).jpeg",
+                 "j (7).jpeg",
             ]
         },
         {
@@ -700,3 +700,4 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
