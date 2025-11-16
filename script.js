@@ -13,12 +13,12 @@ const GALLERY_CONFIG = {
             description: "Aqui estão nossos momentos mais especiais juntos...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                "m (1).jpeg",
-                "m (2).jpeg",
-                "m (3).jpeg",
-                "m (4).jpeg",
-                "m (5).jpeg",
-                "m (6).jpeg"
+                "imagens/momentos/m (1).jpeg",
+                "imagens/momentos/m (2).jpeg",
+                "imagens/momentos/m (3).jpeg",
+                "imagens/momentos/m (4).jpeg",
+                "imagens/momentos/m (5).jpeg",
+                "imagens/momentos/m (6).jpeg"
             ]
         },
         {
@@ -27,10 +27,10 @@ const GALLERY_CONFIG = {
             description: "Os lugares que marcaram nossa história de amor...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                 "l (1).jpeg",
-                 "l (2).jpeg",
-                 "l (3).jpeg",
-                 "l (4).jpeg",
+                 "imagens/lugares/l (1).jpeg",
+                 "imagens/lugares/l (2).jpeg",
+                 "imagens/lugares/l (3).jpeg",
+                 "imagens/lugares/l (4).jpeg",
             ]
         },
         {
@@ -41,13 +41,13 @@ const GALLERY_CONFIG = {
                 // ADICIONE SUAS IMAGENS AQUI:
                  
                  
-                 "mu (1).jpeg",
-                 "mu (2).jpeg",
-                 "mu (3).jpeg",
-                 "mu (4).jpeg",
-                 "mu (5).jpeg",
-                 "mu (6).jpeg",
-                 "mu (7).jpeg"
+                 "imagens/musicas/mu (1).jpeg",
+                 "imagens/musicas/mu (2).jpeg",
+                 "imagens/musicas/mu (3).jpeg",
+                 "imagens/musicas/mu (4).jpeg",
+                 "imagens/musicas/mu (5).jpeg",
+                 "imagens/musicas/mu (6).jpeg",
+                 "imagens/musicas/mu (7).jpeg"
 
             ]
         },
@@ -57,13 +57,13 @@ const GALLERY_CONFIG = {
             description: "Nossas memórias capturadas em imagens...",
             images: [
                 // ADICIONE SUAS IMAGENS AQUI:
-                 "j (1).jpeg",
-                 "j (2).jpeg",
-                 "j (3).jpeg",
-                 "j (4).jpeg",
-                 "j (5).jpeg",
-                 "j (6).jpeg",
-                 "j (7).jpeg",
+                 "imagens/juntos/j (1).jpeg",
+                 "imagens/juntos/j (2).jpeg",
+                 "imagens/juntos/j (3).jpeg",
+                 "imagens/juntos/j (4).jpeg",
+                 "imagens/juntos/j (5).jpeg",
+                 "imagens/juntos/j (6).jpeg",
+                 "imagens/juntos/j (7).jpeg",
             ]
         },
         {
@@ -77,11 +77,11 @@ const GALLERY_CONFIG = {
             ]
         },
         {
-            title: "Memórias Felizes",
+            title: "Desenhos preferidos",
             emoji: "🌟",
             description: "Lembranças que nos fazem sorrir sempre...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
+                // ADICIONE SUAS IMAGENS AQUI: Sitio pica pau amarelo, princesinha sofia, backardgans, mushu mulan
                  "imagens/memoria1.jpg",
                  "imagens/memoria2.jpg"
             ]
@@ -642,4 +642,61 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('🖼️ Galeria configurável disponível!');
 });
 
+// ===== CONFIGURAÇÃO DAS DATAS =====
+// Altere essas datas conforme necessário
 
+// Natal sempre no ano atual (25 de dezembro)
+const natal = new Date(new Date().getFullYear(), 11, 25);
+
+// Aniversário de namoro - ALTERE AQUI (exemplo: 15 de março de 2026)
+const aniversarioNamoro = new Date(2026, 2, 15); // mês 2 = março (começa em 0)
+
+// Aniversário da Gisele - 7 de maio
+const aniversarioGisele = new Date(new Date().getFullYear(), 4, 7); // mês 4 = maio
+
+// ===== FUNÇÃO PARA CALCULAR DIAS =====
+function calcularDias(dataFutura) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    
+    const futuro = new Date(dataFutura);
+    futuro.setHours(0, 0, 0, 0);
+    
+    // Se a data já passou este ano, calcula para o próximo ano
+    if (futuro < hoje) {
+        futuro.setFullYear(hoje.getFullYear() + 1);
+    }
+    
+    // Calcula a diferença em milissegundos e converte para dias
+    const diferenca = futuro - hoje;
+    const dias = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
+    
+    return dias;
+}
+
+// ===== FUNÇÃO PARA ATUALIZAR OS CONTADORES =====
+function atualizarContadores() {
+    // Calcula os dias para cada data
+    const diasNatal = calcularDias(natal);
+    const diasNamoro = calcularDias(aniversarioNamoro);
+    const diasAniversario = calcularDias(aniversarioGisele);
+    
+    // Atualiza o HTML
+    document.getElementById('diasNatal').textContent = diasNatal;
+    document.getElementById('diasNamoro').textContent = diasNamoro;
+    document.getElementById('diasAniversario').textContent = diasAniversario;
+    
+    // Atualiza os textos (singular/plural)
+    document.getElementById('textoNatal').textContent = diasNatal === 1 ? 'dia restante' : 'dias restantes';
+    document.getElementById('textoNamoro').textContent = diasNamoro === 1 ? 'dia restante' : 'dias restantes';
+    document.getElementById('textoAniversario').textContent = diasAniversario === 1 ? 'dia restante' : 'dias restantes';
+}
+
+// ===== EXECUTA QUANDO A PÁGINA CARREGAR =====
+window.addEventListener('DOMContentLoaded', function() {
+    // Atualiza imediatamente
+    atualizarContadores();
+    
+    // Atualiza a cada 1 hora
+    setInterval(atualizarContadores, 3600000);
+});
