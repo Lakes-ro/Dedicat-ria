@@ -649,10 +649,10 @@ document.addEventListener('DOMContentLoaded', function() {
 const natal = new Date(new Date().getFullYear(), 11, 25);
 
 // Aniversário de namoro - ALTERE AQUI (exemplo: 15 de março de 2026)
-const aniversarioNamoro = new Date(2026, 2, 15); // mês 2 = março (começa em 0)
+const aniversarioNamoro = new Date(2026, 5, 7); // mês 5 = março (começa em 0)
 
 // Aniversário da Gisele - 7 de maio
-const aniversarioGisele = new Date(new Date().getFullYear(), 4, 7); // mês 4 = maio
+const aniversarioGisele = new Date(new Date().getFullYear(), 2, 4); // mês 4 = maio
 
 // ===== FUNÇÃO PARA CALCULAR DIAS =====
 function calcularDias(dataFutura) {
@@ -673,7 +673,6 @@ function calcularDias(dataFutura) {
     
     return dias;
 }
-
 // ===== FUNÇÃO PARA ATUALIZAR OS CONTADORES =====
 function atualizarContadores() {
     // Calcula os dias para cada data
@@ -700,6 +699,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
