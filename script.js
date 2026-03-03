@@ -82,7 +82,8 @@ const GALLERY_CONFIG = {
                
                  "all star.jfif",
                  "inabalável.jpg",
-               "mulan.jpg"
+                 "mulan.jpg",
+               "aviao.webp"
             ]
         }
     ]
@@ -698,6 +699,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
