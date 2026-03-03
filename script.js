@@ -1,19 +1,13 @@
 // ===== CONFIGURAÇÃO DA GALERIA =====
 // VOCÊ PODE MODIFICAR FACILMENTE AS IMAGENS E CATEGORIAS AQUI
 const GALLERY_CONFIG = {
-    // Para adicionar uma nova categoria, adicione um objeto com:
-    // - title: título da categoria
-    // - emoji: emoji para exibir
-    // - description: descrição que aparece quando clicada
-    // - images: array com caminhos das imagens (adicione suas próprias imagens aqui)
-    categories: [
+   categories: [
         {
             title: "Momentos Especiais",
             emoji: "🌹",
             description: "Aqui estão nossos momentos mais especiais juntos...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
-                "m (1).jpeg",
+               "m (1).jpeg",
                 "m (2).jpeg",
                 "m (3).jpeg",
                 "m (4).jpeg",
@@ -40,9 +34,7 @@ const GALLERY_CONFIG = {
             emoji: "🎵",
             description: "As músicas que tocam nossos corações...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
-                 
-                 
+                     
                  "mu (1).jpeg",
                  "mu (2).jpeg",
                  "mu (3).jpeg",
@@ -58,7 +50,7 @@ const GALLERY_CONFIG = {
             emoji: "📸",
             description: "Nossas memórias capturadas em imagens...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
+                
                  "j (1).jpeg",
                  "j (2).jpeg",
                  "j (3).jpeg",
@@ -76,7 +68,7 @@ const GALLERY_CONFIG = {
             emoji: "💌",
             description: "Palavras de amor que guardamos no coração...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
+            
                  "imagens/carta1.jpg",
                  "imagens/carta2.jpg"
             ]
@@ -86,7 +78,7 @@ const GALLERY_CONFIG = {
             emoji: "🌟",
             description: "Lembranças que nos fazem sorrir sempre...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI: Sitio pica pau amarelo, princesinha sofia, backardgans, mushu mulan
+               
                  "imagens/memoria1.jpg",
                  "imagens/memoria2.jpg"
             ]
@@ -704,6 +696,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
