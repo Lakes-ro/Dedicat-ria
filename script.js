@@ -41,7 +41,8 @@ const GALLERY_CONFIG = {
                  "mu (4).jpeg",
                  "mu (5).jpeg",
                  "mu (6).jpeg",
-                 "mu (7).jpeg"
+                 "mu (7).jpeg",
+                 "nao temas.jpg
 
             ]
         },
@@ -79,8 +80,9 @@ const GALLERY_CONFIG = {
             description: "Lembranças que nos fazem sorrir sempre...",
             images: [
                
-                 "imagens/memoria1.jpg",
-                 "imagens/memoria2.jpg"
+                 "all star.jfif",
+                 "inabalável.jpg",
+               "mulan.jpg"
             ]
         }
     ]
@@ -696,6 +698,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
