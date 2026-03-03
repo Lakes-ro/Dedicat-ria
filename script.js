@@ -65,13 +65,13 @@ const GALLERY_CONFIG = {
             ]
         },
         {
-            title: "Cartas de Amor",
-            emoji: "💌",
-            description: "Palavras de amor que guardamos no coração...",
+            title: "Aviões a jatos",
+            title: " de Amor",
+            title: " de Amor",
+            emoji: "✈",
+            description: "zuuummm...",
             images: [
-            
-                 "imagens/carta1.jpg",
-                 "imagens/carta2.jpg"
+                       "aviao.webp"
             ]
         },
         {
@@ -81,9 +81,8 @@ const GALLERY_CONFIG = {
             images: [
                
                  "all star.jfif",
-                 "inabalável.jpg",
-                 "mulan.jpg",
-               "aviao.webp"
+                 "inabalavel.jpg",
+                 "mulan.jpg"              
             ]
         }
     ]
@@ -699,6 +698,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
