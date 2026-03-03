@@ -74,7 +74,7 @@ const GALLERY_CONFIG = {
             ]
         },
         {
-            title: "Desenhos preferidos",
+            title: "Coisas preferidos",
             emoji: "🌟",
             description: "Lembranças que nos fazem sorrir sempre...",
             images: [
@@ -696,6 +696,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
