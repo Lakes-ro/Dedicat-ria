@@ -42,7 +42,7 @@ const GALLERY_CONFIG = {
                  "mu (5).jpeg",
                  "mu (6).jpeg",
                  "mu (7).jpeg",
-                 "nao temas.jpg
+                 "nao temas.jpg"
 
             ]
         },
@@ -698,6 +698,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
