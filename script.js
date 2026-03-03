@@ -31,6 +31,12 @@ const GALLERY_CONFIG = {
                  "l (2).jpeg",
                  "l (3).jpeg",
                  "l (4).jpeg",
+                 "Eu e ela 0.jpeg",
+                 "eu e ela 1.jpeg",
+                 "eu e ela 2.jpeg",
+                 "eu e ela 3.jpeg",
+                 "eu e ela 4.jpeg",
+                 "eu e ela 5.jpeg"
             ]
         },
         {
@@ -699,6 +705,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Atualiza a cada 1 hora
     setInterval(atualizarContadores, 3600000);
 });
+
 
 
 
