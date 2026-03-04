@@ -1,18 +1,13 @@
 // ===== CONFIGURAÇÃO DA GALERIA =====
-// VOCÊ PODE MODIFICAR FACILMENTE AS IMAGENS E CATEGORIAS AQUI
 const GALLERY_CONFIG = {
-   categories: [
+    categories: [
         {
             title: "Momentos Especiais",
             emoji: "🌹",
             description: "Aqui estão nossos momentos mais especiais juntos...",
             images: [
-               "m (1).jpeg",
-                "m (2).jpeg",
-                "m (3).jpeg",
-                "m (4).jpeg",
-                "m (5).jpeg",
-                "m (6).jpeg"
+                "m (1).jpeg", "m (2).jpeg", "m (3).jpeg",
+                "m (4).jpeg", "m (5).jpeg", "m (6).jpeg"
             ]
         },
         {
@@ -20,30 +15,17 @@ const GALLERY_CONFIG = {
             emoji: "💕",
             description: "Os lugares que marcaram nossa história de amor...",
             images: [
-                // ADICIONE SUAS IMAGENS AQUI:
-                 "l (1).jpeg",
-                 "l (2).jpeg",
-                 "l (3).jpeg",
-                 "l (4).jpeg",
-                "eu e ela 4.jpeg",
-                 "eu e ela 5.jpeg"
-              ]
+                "l (1).jpeg", "l (2).jpeg", "l (3).jpeg", "l (4).jpeg",
+                "eu e ela 4.jpeg", "eu e ela 5.jpeg"
+            ]
         },
         {
             title: "Músicas Favoritas",
             emoji: "🎵",
             description: "As músicas que tocam nossos corações...",
             images: [
-                     
-                 "mu (1).jpeg",
-                 "mu (2).jpeg",
-                 "mu (3).jpeg",
-                 "mu (4).jpeg",
-                 "mu (5).jpeg",
-                 "mu (6).jpeg",
-                 "mu (7).jpeg",
-                 "nao temas.jpg"
-
+                "mu (1).jpeg", "mu (2).jpeg", "mu (3).jpeg", "mu (4).jpeg",
+                "mu (5).jpeg", "mu (6).jpeg", "mu (7).jpeg", "nao temas.jpg"
             ]
         },
         {
@@ -51,664 +33,487 @@ const GALLERY_CONFIG = {
             emoji: "📸",
             description: "Nossas memórias capturadas em imagens...",
             images: [
-                
-                 "j (1).jpeg",
-                 "j (2).jpeg",
-                 "j (3).jpeg",
-                 "j (4).jpeg",
-                 "j (5).jpeg",
-                 "j (6).jpeg",
-                 "j (7).jpeg",
-                  "eu e ela 1.jpeg",
-                 "eu e ela 2.jpeg",
-                 "eu e ela 3.jpeg"                 
+                "j (1).jpeg", "j (2).jpeg", "j (3).jpeg", "j (4).jpeg",
+                "j (5).jpeg", "j (6).jpeg", "j (7).jpeg",
+                "eu e ela 1.jpeg", "eu e ela 2.jpeg", "eu e ela 3.jpeg"
             ]
         },
         {
             title: "Aviões a jatos",
-            title: " de Amor",
-            title: " de Amor",
             emoji: "✈",
             description: "zuuummm...",
             images: [
-                       "aviao.webp"
+                "aviao.webp"
             ]
         },
         {
-            title: "Coisas preferidos",
+            title: "Coisas preferidas",
             emoji: "🌟",
             description: "Lembranças que nos fazem sorrir sempre...",
             images: [
-               
-                 "all star.jfif",
-                 "inabalavel.jpg",
-                 "mulan.jpg"              
+                "all star.jfif", "inabalavel.jpg", "mulan.jpg"
             ]
         }
     ]
 };
 
-// ===== SISTEMA DE MENSAGENS PERSISTENTES =====
-class MessageSystem {
-    constructor() {
-        this.storageKey = 'perfil_romantico_mensagens';
-        this.loadMessages();
-    }
+// =======================================================
+// ===== CONFIGURAÇÃO DO JSONBIN ======
+// =======================================================
 
-    // Carrega mensagens do localStorage
-    loadMessages() {
+
+const JSONBIN_BIN_ID  = "69a7777ed0ea881f40ec1dc0";   // ex: "6634abc123def456"
+const JSONBIN_API_KEY = "$2a$10$/o.eUT1XEJbbNVDFZo.Z3e/2PGepiLi18J092/kBMwmHGgQWZeuZK";   // ex: "$2a$10$abc..."
+
+// =======================================================
+
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+// ===== SISTEMA DE MENSAGENS =====
+const messageSystem = {
+
+    async getAllMessages() {
         try {
-            const stored = localStorage.getItem(this.storageKey);
-            this.messages = stored ? JSON.parse(stored) : [];
-        } catch (error) {
-            console.error('Erro ao carregar mensagens:', error);
-            this.messages = [];
+            const res = await fetch(JSONBIN_URL + "/latest", {
+                headers: { "X-Master-Key": JSONBIN_API_KEY }
+            });
+            if (!res.ok) throw new Error("Erro ao buscar");
+            const data = await res.json();
+            return data.record?.mensagens || [];
+        } catch (err) {
+            console.error("Erro ao buscar mensagens:", err);
+            return [];
+        }
+    },
+
+    async addMessage(name, message) {
+        try {
+            const mensagens = await this.getAllMessages();
+            mensagens.unshift({
+                id: Date.now(),
+                name: name || "Anônimo",
+                message: message,
+                timestamp: new Date().toLocaleString("pt-BR")
+            });
+            const res = await fetch(JSONBIN_URL, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Master-Key": JSONBIN_API_KEY
+                },
+                body: JSON.stringify({ mensagens })
+            });
+            return res.ok;
+        } catch (err) {
+            console.error("Erro ao salvar:", err);
+            return false;
+        }
+    },
+
+    async clearAllMessages() {
+        try {
+            const res = await fetch(JSONBIN_URL, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Master-Key": JSONBIN_API_KEY
+                },
+                body: JSON.stringify({ mensagens: [] })
+            });
+            return res.ok;
+        } catch (err) {
+            console.error("Erro ao limpar:", err);
+            return false;
         }
     }
+};
 
-    // Salva mensagens no localStorage
-    saveMessages() {
-        try {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.messages));
-        } catch (error) {
-            console.error('Erro ao salvar mensagens:', error);
-        }
+// ===== CONFIGURAÇÃO DAS DATAS =====
+
+// Natal - 25 de dezembro (mês 11 = dezembro)
+const natal = new Date(new Date().getFullYear(), 11, 25);
+
+// Aniversário de namoro - 07 de junho (mês 5 = junho, comemora todo ano)
+const aniversarioNamoro = new Date(new Date().getFullYear(), 5, 7);
+
+// Aniversário da Gisele - 04 de março (mês 2 = março)
+const aniversarioGisele = new Date(new Date().getFullYear(), 2, 4);
+
+// ===== CALCULAR DIAS =====
+function calcularDias(dataFutura) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const futuro = new Date(dataFutura);
+    futuro.setHours(0, 0, 0, 0);
+
+    // Se a data já passou este ano, avança para o próximo
+    if (futuro < hoje) {
+        futuro.setFullYear(hoje.getFullYear() + 1);
     }
 
-    // Adiciona nova mensagem
-    addMessage(name, email, message) {
-        const newMessage = {
-            id: Date.now(),
-            name: name || 'Anônimo',
-            email: email || '',
-            message: message,
-            timestamp: new Date().toLocaleString('pt-BR'),
-            date: new Date().toISOString()
-        };
-        
-        this.messages.unshift(newMessage); // Adiciona no início
-        this.saveMessages();
-        return newMessage;
-    }
-
-    // Obtém todas as mensagens
-    getAllMessages() {
-        return this.messages;
-    }
-
-    // Remove uma mensagem (opcional)
-    removeMessage(id) {
-        this.messages = this.messages.filter(msg => msg.id !== id);
-        this.saveMessages();
-    }
-
-    // Limpa todas as mensagens (opcional)
-    clearAllMessages() {
-        this.messages = [];
-        this.saveMessages();
-    }
+    const diferenca = futuro - hoje;
+    return Math.ceil(diferenca / (1000 * 60 * 60 * 24));
 }
 
-// Instância global do sistema de mensagens
-const messageSystem = new MessageSystem();
+// ===== ATUALIZAR CONTADORES =====
+function atualizarContadores() {
+    const diasNatal       = calcularDias(natal);
+    const diasNamoro      = calcularDias(aniversarioNamoro);
+    const diasAniversario = calcularDias(aniversarioGisele);
 
-// Aguarda o carregamento completo da página
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // Elementos principais
-    const profileCard = document.querySelector('.profile-card');
-    const profilePicture = document.querySelector('.profile-picture');
-    const primaryButton = document.querySelector('.action-button.primary');
-    const secondaryButton = document.querySelector('.action-button.secondary');
-    
-    // Inicialização
+    document.getElementById("diasNatal").textContent       = diasNatal;
+    document.getElementById("diasNamoro").textContent      = diasNamoro;
+    document.getElementById("diasAniversario").textContent = diasAniversario;
+
+    document.getElementById("textoNatal").textContent       = diasNatal === 1       ? "dia restante" : "dias restantes";
+    document.getElementById("textoNamoro").textContent      = diasNamoro === 1      ? "dia restante" : "dias restantes";
+    document.getElementById("textoAniversario").textContent = diasAniversario === 1 ? "dia restante" : "dias restantes";
+}
+
+// ===== INICIALIZAÇÃO =====
+document.addEventListener("DOMContentLoaded", function () {
+
+    const profileCard     = document.querySelector(".profile-card");
+    const profilePicture  = document.querySelector(".profile-picture");
+    const primaryButton   = document.querySelector(".action-button.primary");
+    const secondaryButton = document.querySelector(".action-button.secondary");
+
+    atualizarContadores();
+    setInterval(atualizarContadores, 3600000);
+
     initializeAnimations();
     setupButtonEvents();
     createFloatingHearts();
     addInteractiveEffects();
-    
-    // Função para inicializar animações
+    injectExtraStyles();
+
+    setTimeout(() => showSuccessMessage("💕 Bem-vinda ao seu espaço especial, Gisele! 💕"), 1000);
+
+    // ===== ANIMAÇÕES =====
     function initializeAnimations() {
-        // Animação de entrada do card
-        profileCard.style.opacity = '0';
-        profileCard.style.transform = 'translateY(50px)';
-        
+        profileCard.style.opacity   = "0";
+        profileCard.style.transform = "translateY(50px)";
+
         setTimeout(() => {
-            profileCard.style.transition = 'all 0.8s ease-out';
-            profileCard.style.opacity = '1';
-            profileCard.style.transform = 'translateY(0)';
+            profileCard.style.transition = "all 0.8s ease-out";
+            profileCard.style.opacity    = "1";
+            profileCard.style.transform  = "translateY(0)";
         }, 100);
-        
-        // Animação sequencial dos elementos
-        const detailElements = document.querySelectorAll('.profile-details p');
-        detailElements.forEach((element, index) => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateX(-30px)';
-            
+
+        document.querySelectorAll(".profile-details p").forEach((el, i) => {
+            el.style.opacity   = "0";
+            el.style.transform = "translateX(-30px)";
             setTimeout(() => {
-                element.style.transition = 'all 0.6s ease-out';
-                element.style.opacity = '1';
-                element.style.transform = 'translateX(0)';
-            }, 500 + (index * 150));
+                el.style.transition = "all 0.6s ease-out";
+                el.style.opacity    = "1";
+                el.style.transform  = "translateX(0)";
+            }, 500 + i * 150);
         });
     }
-    
-    // Configuração dos eventos dos botões
+
+    // ===== BOTÕES =====
     function setupButtonEvents() {
-        // Botão "Enviar Mensagem"
-        primaryButton.addEventListener('click', function() {
+        primaryButton.addEventListener("click", function () {
             showMessageModal();
             createHeartBurst(this);
         });
-        
-        // Botão "Ver Galeria"
-        secondaryButton.addEventListener('click', function() {
+        secondaryButton.addEventListener("click", function () {
             showGalleryModal();
             createHeartBurst(this);
         });
     }
-    
-    // Modal para enviar mensagem
+
+    // ===== MODAL: ENVIAR MENSAGEM =====
     function showMessageModal() {
-        const modal = createModal('Enviar Mensagem Romântica', `
+        const modal = createModal("Enviar Mensagem 💕", `
             <form class="message-form" id="messageForm">
-                <textarea name="message" placeholder="Escreva sua mensagem romântica aqui..." required></textarea>
+                <input name="name" type="text" placeholder="Seu nome (opcional)" maxlength="50" />
+                <textarea name="message" placeholder="Escreva sua mensagem aqui..." required maxlength="500"></textarea>
                 <button type="submit" class="action-button primary">💕 Enviar Mensagem</button>
             </form>
-            <div style="margin-top: 20px;">
-                <button type="button" class="action-button secondary" onclick="showMessagesModal()">
-                    📝 Ver Mensagens Enviadas (${messageSystem.getAllMessages().length})
+            <div style="margin-top: 15px; text-align:center;">
+                <button type="button" class="action-button secondary" id="btnVerMensagens">
+                    📝 Ver Mensagens
                 </button>
             </div>
         `);
-        
-        // Evento do formulário
-        const form = modal.querySelector('#messageForm');
-        form.addEventListener('submit', function(e) {
+
+        modal.querySelector("#btnVerMensagens").addEventListener("click", showMessagesModal);
+
+        modal.querySelector("#messageForm").addEventListener("submit", async function (e) {
             e.preventDefault();
-            handleMessageSubmit(form);
+            await handleMessageSubmit(this);
         });
     }
-    
-    // Modal para galeria com imagens configuráveis
-    function showGalleryModal() {
-        const galleryHTML = `
-            <div class="gallery-grid">
-                ${GALLERY_CONFIG.categories.map((category, index) => `
-                    <div class="gallery-item" onclick="showGalleryDetail(${index})">
-                        ${category.emoji} ${category.title}
-                    </div>
-                `).join('')}
+
+    // ===== MODAL: VER MENSAGENS =====
+    window.showMessagesModal = async function () {
+        const modal = createModal("Mensagens de Amor 💌", `
+            <div id="messagesListContainer">
+                <p style="text-align:center; color:var(--light-text-color);">⏳ Carregando mensagens...</p>
             </div>
-        `;
-        
-        createModal('Galeria Romântica', galleryHTML);
-    }
-    
-    // Modal para exibir mensagens enviadas
-    window.showMessagesModal = function() {
-        const messages = messageSystem.getAllMessages();
-        
-        let messagesHTML = '';
-        if (messages.length === 0) {
-            messagesHTML = '<p style="text-align: center; color: var(--light-text-color); font-style: italic;">Nenhuma mensagem enviada ainda. 💕</p>';
+        `);
+
+        const msgs = await messageSystem.getAllMessages();
+        const container = document.getElementById("messagesListContainer");
+        if (!container) return;
+
+        if (msgs.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:var(--light-text-color); font-style:italic;">
+                Nenhuma mensagem ainda. 💕
+            </p>`;
         } else {
-            messagesHTML = `
+            container.innerHTML = `
                 <div class="messages-container">
-                    ${messages.map(msg => `
+                    ${msgs.map(msg => `
                         <div class="message-item">
                             <div class="message-header">
-                                <strong>${msg.name}</strong>
+                                <strong>${escapeHtml(msg.name)}</strong>
                                 <span class="message-date">${msg.timestamp}</span>
                             </div>
-                            <div class="message-content">${msg.message}</div>
+                            <div class="message-content">${escapeHtml(msg.message)}</div>
                         </div>
-                    `).join('')}
+                    `).join("")}
                 </div>
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="action-button secondary" onclick="clearAllMessages()" style="font-size: 0.9em;">
-                        🗑️ Limpar Todas as Mensagens
+                <div style="text-align:center; margin-top:20px;">
+                    <button class="action-button secondary" id="btnLimpar" style="font-size:0.9em;">
+                        🗑️ Limpar Todas
                     </button>
                 </div>
             `;
-        }
-        
-        createModal(`Mensagens de Amor (${messages.length})`, messagesHTML);
-    };
-    
-    // Função para limpar todas as mensagens
-    window.clearAllMessages = function() {
-        if (confirm('Tem certeza que deseja limpar todas as mensagens? Esta ação não pode ser desfeita.')) {
-            messageSystem.clearAllMessages();
-            showSuccessMessage('Todas as mensagens foram removidas! 🗑️');
-            document.querySelector('.modal').style.display = 'none';
+
+            document.getElementById("btnLimpar").addEventListener("click", async () => {
+                if (confirm("Tem certeza? Esta ação não pode ser desfeita.")) {
+                    await messageSystem.clearAllMessages();
+                    showSuccessMessage("Mensagens removidas! 🗑️");
+                    document.querySelector(".modal")?.remove();
+                }
+            });
         }
     };
-    
-    // Função para criar modal genérico
+
+    // ===== ENVIO DA MENSAGEM =====
+    async function handleMessageSubmit(form) {
+        const name    = form.querySelector("[name='name']").value.trim();
+        const message = form.querySelector("[name='message']").value.trim();
+
+        if (!message) return;
+
+        const btn = form.querySelector("button[type='submit']");
+        btn.textContent = "💕 Enviando...";
+        btn.disabled    = true;
+
+        const ok = await messageSystem.addMessage(name, message);
+
+        if (ok) {
+            btn.textContent           = "✅ Enviado!";
+            btn.style.backgroundColor = "#27ae60";
+            setTimeout(() => {
+                document.querySelector(".modal")?.remove();
+                showSuccessMessage("Mensagem enviada com amor! 💕");
+            }, 1200);
+        } else {
+            btn.textContent           = "❌ Erro ao enviar";
+            btn.style.backgroundColor = "#e74c3c";
+            btn.disabled              = false;
+            showSuccessMessage("Erro! Verifique o BIN ID e API KEY do JSONBin.", true);
+        }
+    }
+
+    // ===== MODAL: GALERIA =====
+    function showGalleryModal() {
+        createModal("Galeria Romântica", `
+            <div class="gallery-grid">
+                ${GALLERY_CONFIG.categories.map((cat, i) => `
+                    <div class="gallery-item" onclick="showGalleryDetail(${i})">
+                        ${cat.emoji} ${cat.title}
+                    </div>
+                `).join("")}
+            </div>
+        `);
+    }
+
+    window.showGalleryDetail = function (index) {
+        const cat = GALLERY_CONFIG.categories[index];
+        const imagesHTML = cat.images?.length
+            ? `<div class="gallery-images">
+                ${cat.images.map(src => `
+                    <img src="${src}" alt="${cat.title}" class="gallery-image"
+                         onclick="showFullImage('${src}')">
+                `).join("")}
+               </div>`
+            : `<p style="text-align:center; font-style:italic; color:var(--light-text-color);">
+                📷 Adicione imagens no GALLERY_CONFIG do script.js
+               </p>`;
+
+        createModal(`${cat.emoji} ${cat.title}`, `
+            <p style="font-size:1.1em; line-height:1.8; color:var(--text-color); margin-bottom:20px;">
+                ${cat.description}
+            </p>
+            ${imagesHTML}
+            <div style="text-align:center; margin-top:20px;">
+                <button class="action-button primary"
+                    onclick="document.querySelector('.modal').remove()">💕 Fechar</button>
+            </div>
+        `);
+    };
+
+    window.showFullImage = function (src) {
+        createModal("", `
+            <div style="text-align:center;">
+                <img src="${src}" style="max-width:100%; max-height:70vh; border-radius:10px;">
+            </div>
+        `);
+    };
+
+    // ===== MODAL GENÉRICO =====
     function createModal(title, content) {
-        // Remove modal existente se houver
-        const existingModal = document.querySelector('.modal');
-        if (existingModal) {
-            existingModal.remove();
-        }
-        
-        const modal = document.createElement('div');
-        modal.className = 'modal';
+        document.querySelector(".modal")?.remove();
+
+        const modal = document.createElement("div");
+        modal.className = "modal";
         modal.innerHTML = `
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <h2 style="color: var(--primary-color); font-family: 'Playfair Display', serif; margin-bottom: 20px;">${title}</h2>
+                ${title ? `<h2 style="color:var(--primary-color); font-family:'Playfair Display',serif; margin-bottom:20px;">${title}</h2>` : ""}
                 ${content}
             </div>
         `;
-        
+
         document.body.appendChild(modal);
-        modal.style.display = 'block';
-        
-        // Evento para fechar modal
-        const closeBtn = modal.querySelector('.close');
-        closeBtn.addEventListener('click', () => {
-            modal.style.display = 'none';
-            setTimeout(() => modal.remove(), 300);
-        });
-        
-        // Fechar ao clicar fora do modal
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                setTimeout(() => modal.remove(), 300);
-            }
-        });
-        
+        modal.style.display = "block";
+
+        modal.querySelector(".close").addEventListener("click", () => modal.remove());
+        modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+
         return modal;
     }
-    
-    // Manipular envio de mensagem
-    function handleMessageSubmit(form) {
-        const formData = new FormData(form);
-        const name = formData.get('name');
-        const email = formData.get('email');
-        const message = formData.get('message');
-        
-        // Simular envio
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        
-        submitBtn.textContent = '💕 Enviando...';
-        submitBtn.disabled = true;
-        
-        setTimeout(() => {
-            // Salvar mensagem no sistema persistente
-            messageSystem.addMessage(name, email, message);
-            
-            submitBtn.textContent = '✅ Mensagem Enviada!';
-            submitBtn.style.backgroundColor = '#27ae60';
-            
-            setTimeout(() => {
-                showSuccessMessage(`Obrigada pela mensagem! 💕 Sua mensagem foi salva e pode ser vista por outros visitantes.`);
-                document.querySelector('.modal').style.display = 'none';
-            }, 1500);
-        }, 2000);
-    }
-    
-    // Mostrar mensagem de sucesso
-    function showSuccessMessage(message) {
-        const successDiv = document.createElement('div');
-        successDiv.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            z-index: 1001;
-            font-family: 'Lora', serif;
+
+    // ===== TOAST =====
+    function showSuccessMessage(text, isError = false) {
+        const div = document.createElement("div");
+        div.style.cssText = `
+            position: fixed; top: 20px; right: 20px;
+            background: linear-gradient(135deg, ${isError ? "#e74c3c, #c0392b" : "#27ae60, #2ecc71"});
+            color: white; padding: 15px 25px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1001;
+            font-family: 'Lora', serif; max-width: 300px;
             animation: slideInRight 0.5s ease-out;
-            max-width: 300px;
         `;
-        successDiv.textContent = message;
-        
-        document.body.appendChild(successDiv);
-        
+        div.textContent = text;
+        document.body.appendChild(div);
         setTimeout(() => {
-            successDiv.style.animation = 'slideOutRight 0.5s ease-in forwards';
-            setTimeout(() => successDiv.remove(), 500);
+            div.style.animation = "slideOutRight 0.5s ease-in forwards";
+            setTimeout(() => div.remove(), 500);
         }, 4000);
     }
-    
-    // Criar explosão de corações
-    function createHeartBurst(element) {
-        const rect = element.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        
+
+    // ===== CORAÇÕES =====
+    function createHeartBurst(el) {
+        const rect = el.getBoundingClientRect();
         for (let i = 0; i < 8; i++) {
-            setTimeout(() => {
-                createFloatingHeart(centerX, centerY);
-            }, i * 100);
+            setTimeout(() => createFloatingHeart(
+                rect.left + rect.width / 2,
+                rect.top + rect.height / 2
+            ), i * 100);
         }
     }
-    
-    // Criar coração flutuante
+
     function createFloatingHeart(x, y) {
-        const heart = document.createElement('div');
-        heart.className = 'floating-hearts';
-        heart.textContent = '💕';
-        heart.style.left = x + 'px';
-        heart.style.top = y + 'px';
-        
-        // Adicionar variação na posição
-        const randomX = (Math.random() - 0.5) * 100;
-        heart.style.transform = `translateX(${randomX}px)`;
-        
+        const heart = document.createElement("div");
+        heart.className   = "floating-hearts";
+        heart.textContent = "💕";
+        heart.style.left      = x + "px";
+        heart.style.top       = y + "px";
+        heart.style.transform = `translateX(${(Math.random() - 0.5) * 100}px)`;
         document.body.appendChild(heart);
-        
-        setTimeout(() => {
-            heart.remove();
-        }, 3000);
+        setTimeout(() => heart.remove(), 3000);
     }
-    
-    // Corações flutuantes automáticos
+
     function createFloatingHearts() {
         setInterval(() => {
-            const x = Math.random() * window.innerWidth;
-            const y = window.innerHeight + 50;
-            createFloatingHeart(x, y);
+            createFloatingHeart(Math.random() * window.innerWidth, window.innerHeight + 50);
         }, 3000);
     }
-    
-    // Efeitos interativos adicionais
+
+    // ===== EFEITOS INTERATIVOS =====
     function addInteractiveEffects() {
-        // Efeito de hover na foto de perfil
-        profilePicture.addEventListener('mouseenter', function() {
-            this.style.filter = 'brightness(1.1) saturate(1.2)';
+        profilePicture.addEventListener("mouseenter", function () {
+            this.style.filter = "brightness(1.1) saturate(1.2)";
             createHeartBurst(this);
         });
-        
-        profilePicture.addEventListener('mouseleave', function() {
-            this.style.filter = 'none';
+        profilePicture.addEventListener("mouseleave", function () {
+            this.style.filter = "none";
         });
-        
-        // Efeito de clique nos detalhes
-        const detailValues = document.querySelectorAll('.detail-value');
-        detailValues.forEach(detail => {
-            detail.addEventListener('click', function() {
-                this.style.transform = 'scale(1.05)';
-                this.style.backgroundColor = 'var(--secondary-color)';
-                
+
+        document.querySelectorAll(".detail-value").forEach(el => {
+            el.addEventListener("click", function () {
+                this.style.transform       = "scale(1.05)";
+                this.style.backgroundColor = "var(--secondary-color)";
                 setTimeout(() => {
-                    this.style.transform = 'scale(1)';
-                    this.style.backgroundColor = '';
+                    this.style.transform       = "scale(1)";
+                    this.style.backgroundColor = "";
                 }, 200);
-                
-                // Criar coração no local do clique
-                const rect = this.getBoundingClientRect();
-                createFloatingHeart(
-                    rect.left + rect.width / 2,
-                    rect.top + rect.height / 2
-                );
+                const r = this.getBoundingClientRect();
+                createFloatingHeart(r.left + r.width / 2, r.top + r.height / 2);
             });
         });
-        
-        // Efeito de parallax suave no card
-        document.addEventListener('mousemove', function(e) {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
-            
-            const rotateX = (mouseY - 0.5) * 5;
-            const rotateY = (mouseX - 0.5) * -5;
-            
-            profileCard.style.transform = `
-                perspective(1000px) 
-                rotateX(${rotateX}deg) 
-                rotateY(${rotateY}deg)
-                translateZ(0)
-            `;
+
+        document.addEventListener("mousemove", function (e) {
+            const rx = (e.clientY / window.innerHeight - 0.5) * 5;
+            const ry = (e.clientX / window.innerWidth  - 0.5) * -5;
+            profileCard.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg)`;
         });
-        
-        // Resetar transformação quando o mouse sair da janela
-        document.addEventListener('mouseleave', function() {
-            profileCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+
+        document.addEventListener("mouseleave", function () {
+            profileCard.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
         });
     }
-    
-    // Função global para detalhes da galeria
-    window.showGalleryDetail = function(categoryIndex) {
-        const category = GALLERY_CONFIG.categories[categoryIndex];
-        
-        let imagesHTML = '';
-        if (category.images && category.images.length > 0) {
-            imagesHTML = `
-                <div class="gallery-images">
-                    ${category.images.map(imagePath => `
-                        <img src="${imagePath}" alt="${category.title}" class="gallery-image" onclick="showFullImage('${imagePath}')">
-                    `).join('')}
-                </div>
-            `;
-        } else {
-            imagesHTML = `
-                <p style="text-align: center; color: var(--light-text-color); font-style: italic; margin: 20px 0;">
-                    📷 Adicione imagens editando o arquivo script.js na seção GALLERY_CONFIG
-                </p>
-            `;
-        }
-        
-        createModal(`${category.emoji} ${category.title}`, `
-            <p style="font-size: 1.1em; line-height: 1.8; color: var(--text-color); margin-bottom: 20px;">
-                ${category.description}
-            </p>
-            ${imagesHTML}
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="action-button primary" onclick="document.querySelector('.modal').style.display='none'">
-                    💕 Fechar
-                </button>
-            </div>
-        `);
-    };
-    
-    // Função para mostrar imagem em tamanho completo
-    window.showFullImage = function(imagePath) {
-        createModal('Imagem', `
-            <div style="text-align: center;">
-                <img src="${imagePath}" style="max-width: 100%; max-height: 70vh; border-radius: 10px;">
-            </div>
-        `);
-    };
-    
-    // Adicionar animações CSS dinamicamente
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideInRight {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOutRight {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        
-        .profile-details p {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .profile-details p:hover {
-            background-color: rgba(255, 107, 107, 0.05);
-            border-radius: 8px;
-            padding: 5px;
-        }
-        
-        .action-button {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .action-button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.6s ease;
-        }
-        
-        .action-button:active::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .messages-container {
-            max-height: 400px;
-            overflow-y: auto;
-            margin: 20px 0;
-        }
-        
-        .message-item {
-            background: #f8f9fa;
-            border-left: 4px solid var(--primary-color);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: transform 0.2s ease;
-        }
-        
-        .message-item:hover {
-            transform: translateX(5px);
-        }
-        
-        .message-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        
-        .message-header strong {
-            color: var(--primary-color);
-            font-family: 'Playfair Display', serif;
-        }
-        
-        .message-date {
-            font-size: 0.8em;
-            color: var(--light-text-color);
-        }
-        
-        .message-content {
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        
-        .gallery-images {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .gallery-image {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            border: 2px solid var(--border-color);
-        }
-        
-        .gallery-image:hover {
-            transform: scale(1.05);
-            border-color: var(--primary-color);
-        }
-    `;
-    document.head.appendChild(style);
-    
-    // Mensagem de boas-vindas
-    setTimeout(() => {
-        const totalMessages = messageSystem.getAllMessages().length;
-        showSuccessMessage(`💕 Bem-vindo ao perfil da Gisele! ${totalMessages > 0 ? `Já temos ${totalMessages} mensagem(ns) de amor!` : ''} 💕`);
-    }, 1000);
-    
-    console.log('💕 Perfil Romântico carregado com sucesso! 💕');
-    console.log('📝 Sistema de mensagens persistentes ativo!');
-    console.log('🖼️ Galeria configurável disponível!');
-});
 
-// ===== CONFIGURAÇÃO DAS DATAS =====
-// Altere essas datas conforme necessário
-
-// Natal sempre no ano atual (25 de dezembro)
-const natal = new Date(new Date().getFullYear(), 11, 25);
-
-// Aniversário de namoro - ALTERE AQUI (exemplo: 15 de março de 2026)
-const aniversarioNamoro = new Date(2026, 5, 7); // mês 5 = março (começa em 0)
-
-// Aniversário da Gisele - 7 de maio
-const aniversarioGisele = new Date(new Date().getFullYear(), 2, 4); // mês 4 = maio
-
-// ===== FUNÇÃO PARA CALCULAR DIAS =====
-function calcularDias(dataFutura) {
-    const hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
-    
-    const futuro = new Date(dataFutura);
-    futuro.setHours(0, 0, 0, 0);
-    
-    // Se a data já passou este ano, calcula para o próximo ano
-    if (futuro < hoje) {
-        futuro.setFullYear(hoje.getFullYear() + 1);
+    // ===== SEGURANÇA =====
+    function escapeHtml(str) {
+        if (!str) return "";
+        return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
-    
-    // Calcula a diferença em milissegundos e converte para dias
-    const diferenca = futuro - hoje;
-    const dias = Math.ceil(diferenca / (1000 * 60 * 60 * 24));
-    
-    return dias;
-}
-// ===== FUNÇÃO PARA ATUALIZAR OS CONTADORES =====
-function atualizarContadores() {
-    // Calcula os dias para cada data
-    const diasNatal = calcularDias(natal);
-    const diasNamoro = calcularDias(aniversarioNamoro);
-    const diasAniversario = calcularDias(aniversarioGisele);
-    
-    // Atualiza o HTML
-    document.getElementById('diasNatal').textContent = diasNatal;
-    document.getElementById('diasNamoro').textContent = diasNamoro;
-    document.getElementById('diasAniversario').textContent = diasAniversario;
-    
-    // Atualiza os textos (singular/plural)
-    document.getElementById('textoNatal').textContent = diasNatal === 1 ? 'dia restante' : 'dias restantes';
-    document.getElementById('textoNamoro').textContent = diasNamoro === 1 ? 'dia restante' : 'dias restantes';
-    document.getElementById('textoAniversario').textContent = diasAniversario === 1 ? 'dia restante' : 'dias restantes';
-}
 
-// ===== EXECUTA QUANDO A PÁGINA CARREGAR =====
-window.addEventListener('DOMContentLoaded', function() {
-    // Atualiza imediatamente
-    atualizarContadores();
-    
-    // Atualiza a cada 1 hora
-    setInterval(atualizarContadores, 3600000);
+    // ===== ESTILOS EXTRAS =====
+    function injectExtraStyles() {
+        const style = document.createElement("style");
+        style.textContent = `
+            @keyframes slideInRight {
+                from { transform: translateX(100%); opacity: 0; }
+                to   { transform: translateX(0);    opacity: 1; }
+            }
+            @keyframes slideOutRight {
+                from { transform: translateX(0);    opacity: 1; }
+                to   { transform: translateX(100%); opacity: 0; }
+            }
+            .profile-details p { cursor: pointer; transition: all 0.3s ease; }
+            .profile-details p:hover { background-color: rgba(255,107,107,0.05); border-radius: 8px; padding: 5px; }
+            .action-button { position: relative; overflow: hidden; }
+            .action-button::before {
+                content: ""; position: absolute; top: 50%; left: 50%;
+                width: 0; height: 0; background: rgba(255,255,255,0.3);
+                border-radius: 50%; transform: translate(-50%,-50%); transition: all 0.6s ease;
+            }
+            .action-button:active::before { width: 300px; height: 300px; }
+            .messages-container { max-height: 400px; overflow-y: auto; margin: 20px 0; }
+            .message-item {
+                background: #f8f9fa; border-left: 4px solid var(--primary-color);
+                padding: 15px; margin-bottom: 15px; border-radius: 8px; transition: transform 0.2s ease;
+            }
+            .message-item:hover { transform: translateX(5px); }
+            .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+            .message-header strong { color: var(--primary-color); font-family: "Playfair Display", serif; }
+            .message-date { font-size: 0.8em; color: var(--light-text-color); }
+            .message-content { color: var(--text-color); line-height: 1.6; }
+            .gallery-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
+            .gallery-image { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: transform 0.3s ease; border: 2px solid var(--border-color); }
+            .gallery-image:hover { transform: scale(1.05); border-color: var(--primary-color); }
+            .message-form input { padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-family: "Lora", serif; font-size: 1em; width: 100%; box-sizing: border-box; margin-bottom: 5px; }
+            .message-form input:focus { outline: none; border-color: var(--primary-color); }
+        `;
+        document.head.appendChild(style);
+    }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
