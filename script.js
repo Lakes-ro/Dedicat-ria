@@ -35,7 +35,8 @@ const GALLERY_CONFIG = {
             images: [
                 "j (1).jpeg", "j (2).jpeg", "j (3).jpeg", "j (4).jpeg",
                 "j (5).jpeg", "j (6).jpeg", "j (7).jpeg",
-                "eu e ela 1.jpeg", "eu e ela 2.jpeg", "eu e ela 3.jpeg"
+                "eu e ela 1.jpeg", "eu e ela 2.jpeg", "eu e ela 3.jpeg", "img1.jpeg"
+                ,"img2.jpeg"
             ]
         },
         {
