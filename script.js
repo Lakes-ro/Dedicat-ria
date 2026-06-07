@@ -7,7 +7,10 @@ const GALLERY_CONFIG = {
             description: "Aqui estão nossos momentos mais especiais juntos...",
             images: [
                 "m (1).jpeg", "m (2).jpeg", "m (3).jpeg",
-                "m (4).jpeg", "m (5).jpeg", "m (6).jpeg"
+                "m (4).jpeg", "m (5).jpeg", "m (6).jpeg",
+                "Forma (1).jpeg", "Forma (2).jpeg", "Forma (3).jpeg",
+                "Forma (4).jpeg", "Forma (5).jpeg", "Forma (6).jpeg",
+                "Forma (7).jpeg", "Forma (8).jpeg", "Forma(9).jpeg"
             ]
         },
         {
@@ -35,25 +38,21 @@ const GALLERY_CONFIG = {
             images: [
                 "j (1).jpeg", "j (2).jpeg", "j (3).jpeg", "j (4).jpeg",
                 "j (5).jpeg", "j (6).jpeg", "j (7).jpeg",
-                "eu e ela 1.jpeg", "eu e ela 2.jpeg", "eu e ela 3.jpeg", "img1.jpeg"
-                ,"img2.jpeg"
+                "eu e ela 1.jpeg", "eu e ela 2.jpeg", "eu e ela 3.jpeg",
+                "img1.jpeg", "img2.jpeg"
             ]
         },
         {
             title: "Aviões a jatos",
             emoji: "✈",
             description: "zuuummm...",
-            images: [
-                "aviao.webp"
-            ]
+            images: ["aviao.webp"]
         },
         {
             title: "Coisas preferidas",
             emoji: "🌟",
             description: "Lembranças que nos fazem sorrir sempre...",
-            images: [
-                "all star.jfif", "inabalavel.jpg", "mulan.jpg"
-            ]
+            images: ["all star.jfif", "inabalavel.jpg", "mulan.jpg"]
         }
     ]
 };
@@ -61,18 +60,12 @@ const GALLERY_CONFIG = {
 // =======================================================
 // ===== CONFIGURAÇÃO DO JSONBIN ======
 // =======================================================
-
-
-const JSONBIN_BIN_ID  = "69a7777ed0ea881f40ec1dc0";   // ex: "6634abc123def456"
-const JSONBIN_API_KEY = "$2a$10$/o.eUT1XEJbbNVDFZo.Z3e/2PGepiLi18J092/kBMwmHGgQWZeuZK";   // ex: "$2a$10$abc..."
-
-// =======================================================
-
-const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+const JSONBIN_BIN_ID  = "69a7777ed0ea881f40ec1dc0";
+const JSONBIN_API_KEY = "$2a$10$/o.eUT1XEJbbNVDFZo.Z3e/2PGepiLi18J092/kBMwmHGgQWZeuZK";
+const JSONBIN_URL     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 // ===== SISTEMA DE MENSAGENS =====
 const messageSystem = {
-
     async getAllMessages() {
         try {
             const res = await fetch(JSONBIN_URL + "/latest", {
@@ -93,7 +86,7 @@ const messageSystem = {
             mensagens.unshift({
                 id: Date.now(),
                 name: name || "Anônimo",
-                message: message,
+                message,
                 timestamp: new Date().toLocaleString("pt-BR")
             });
             const res = await fetch(JSONBIN_URL, {
@@ -130,51 +123,132 @@ const messageSystem = {
 };
 
 // ===== CONFIGURAÇÃO DAS DATAS =====
+// Mês: janeiro=0, fevereiro=1, março=2, abril=3, maio=4, junho=5,
+//       julho=6, agosto=7, setembro=8, outubro=9, novembro=10, dezembro=11
 
-// Natal - 25 de dezembro (mês 11 = dezembro)
-const natal = new Date(new Date().getFullYear(), 11, 25);
+// Natal: 25 de dezembro
+const DATA_NATAL = { mes: 11, dia: 25 };
 
-// Aniversário de namoro - 07 de junho (mês 5 = junho, comemora todo ano)
-const aniversarioNamoro = new Date(new Date().getFullYear(), 5, 7);
+// Aniversário de namoro: 07 de maio
+const DATA_NAMORO = { mes: 4, dia: 7 };
 
-// Aniversário da Gisele - 04 de março (mês 2 = março)
-const aniversarioGisele = new Date(new Date().getFullYear(), 2, 4);
+// Aniversário da Gisele: 04 de março
+const DATA_GISELE = { mes: 2, dia: 4 };
 
-// ===== CALCULAR DIAS =====
-function calcularDias(dataFutura) {
+/**
+ * Calcula quantos dias faltam para a próxima ocorrência de (mes, dia).
+ * Retorna 0 se for hoje, número positivo caso contrário.
+ * Nunca retorna negativo — avança para o próximo ano automaticamente.
+ */
+function calcularDias(mes, dia) {
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
 
-    const futuro = new Date(dataFutura);
-    futuro.setHours(0, 0, 0, 0);
+    // Tenta este ano
+    let alvo = new Date(hoje.getFullYear(), mes, dia);
+    alvo.setHours(0, 0, 0, 0);
 
-    // Se a data já passou este ano, avança para o próximo
-    if (futuro < hoje) {
-        futuro.setFullYear(hoje.getFullYear() + 1);
+    // Se já passou (alvo < hoje), avança para o próximo ano
+    if (alvo < hoje) {
+        alvo = new Date(hoje.getFullYear() + 1, mes, dia);
+        alvo.setHours(0, 0, 0, 0);
     }
 
-    const diferenca = futuro - hoje;
-    return Math.ceil(diferenca / (1000 * 60 * 60 * 24));
+    return Math.round((alvo - hoje) / (1000 * 60 * 60 * 24));
 }
 
-// ===== ATUALIZAR CONTADORES =====
+function textoContador(dias) {
+    if (dias === 0) return { numero: "🎉",  texto: "É hoje!" };
+    if (dias === 1) return { numero: "1",   texto: "dia restante" };
+    return              { numero: String(dias), texto: "dias restantes" };
+}
+
 function atualizarContadores() {
-    const diasNatal       = calcularDias(natal);
-    const diasNamoro      = calcularDias(aniversarioNamoro);
-    const diasAniversario = calcularDias(aniversarioGisele);
+    const dn = calcularDias(DATA_NATAL.mes,   DATA_NATAL.dia);
+    const da = calcularDias(DATA_NAMORO.mes,  DATA_NAMORO.dia);
+    const dg = calcularDias(DATA_GISELE.mes,  DATA_GISELE.dia);
 
-    document.getElementById("diasNatal").textContent       = diasNatal;
-    document.getElementById("diasNamoro").textContent      = diasNamoro;
-    document.getElementById("diasAniversario").textContent = diasAniversario;
+    const tN = textoContador(dn);
+    const tA = textoContador(da);
+    const tG = textoContador(dg);
 
-    document.getElementById("textoNatal").textContent       = diasNatal === 1       ? "dia restante" : "dias restantes";
-    document.getElementById("textoNamoro").textContent      = diasNamoro === 1      ? "dia restante" : "dias restantes";
-    document.getElementById("textoAniversario").textContent = diasAniversario === 1 ? "dia restante" : "dias restantes";
+    document.getElementById("diasNatal").textContent       = tN.numero;
+    document.getElementById("textoNatal").textContent      = tN.texto;
+
+    document.getElementById("diasNamoro").textContent      = tA.numero;
+    document.getElementById("textoNamoro").textContent     = tA.texto;
+
+    document.getElementById("diasAniversario").textContent = tG.numero;
+    document.getElementById("textoAniversario").textContent = tG.texto;
 }
+
+// ===== LIGHTBOX GLOBAL =====
+const lightboxState = { fotos: [], atual: 0, categoriaIndex: null };
+
+const lightboxEl    = document.getElementById("lightbox");
+const lightboxImg   = document.getElementById("lightboxImg");
+const lightboxCap   = document.getElementById("lightboxCaption");
+const lightboxCount = document.getElementById("lightboxCounter");
+
+lightboxImg.style.transition = "opacity 0.18s ease, transform 0.18s ease";
+
+function abrirLightbox(fotos, index, categoriaIndex) {
+    lightboxState.fotos          = fotos;
+    lightboxState.atual          = index;
+    lightboxState.categoriaIndex = categoriaIndex;
+    atualizarLightboxUI();
+    lightboxEl.classList.add("ativo");
+}
+
+function atualizarLightboxUI() {
+    const { fotos, atual } = lightboxState;
+    lightboxImg.src          = fotos[atual];
+    lightboxCap.textContent  = `${atual + 1} de ${fotos.length}`;
+    lightboxCount.textContent = `${atual + 1} / ${fotos.length}`;
+}
+
+function trocarFotoLightbox(direcao) {
+    const { fotos } = lightboxState;
+    lightboxState.atual = (lightboxState.atual + direcao + fotos.length) % fotos.length;
+
+    lightboxImg.style.opacity   = "0";
+    lightboxImg.style.transform = "scale(0.95)";
+    setTimeout(() => {
+        atualizarLightboxUI();
+        lightboxImg.style.opacity   = "1";
+        lightboxImg.style.transform = "scale(1)";
+    }, 180);
+}
+
+function fecharLightbox() {
+    lightboxEl.classList.remove("ativo");
+}
+
+function voltarParaCategoria() {
+    fecharLightbox();
+    if (lightboxState.categoriaIndex !== null) {
+        showGalleryDetail(lightboxState.categoriaIndex);
+    }
+}
+
+document.getElementById("lightboxPrev").addEventListener("click", () => trocarFotoLightbox(-1));
+document.getElementById("lightboxNext").addEventListener("click", () => trocarFotoLightbox(1));
+document.getElementById("lightboxCloseBtn").addEventListener("click", fecharLightbox);
+document.getElementById("lightboxBackBtn").addEventListener("click", voltarParaCategoria);
+
+lightboxEl.addEventListener("click", (e) => {
+    if (e.target === lightboxEl) fecharLightbox();
+});
+
+document.addEventListener("keydown", (e) => {
+    if (!lightboxEl.classList.contains("ativo")) return;
+    if (e.key === "ArrowRight") trocarFotoLightbox(1);
+    if (e.key === "ArrowLeft")  trocarFotoLightbox(-1);
+    if (e.key === "Escape")     fecharLightbox();
+});
 
 // ===== INICIALIZAÇÃO =====
 document.addEventListener("DOMContentLoaded", function () {
-
     const profileCard     = document.querySelector(".profile-card");
     const profilePicture  = document.querySelector(".profile-picture");
     const primaryButton   = document.querySelector(".action-button.primary");
@@ -189,13 +263,12 @@ document.addEventListener("DOMContentLoaded", function () {
     addInteractiveEffects();
     injectExtraStyles();
 
-    setTimeout(() => showSuccessMessage("💕 Bem-vinda ao seu espaço especial, Gisele! 💕"), 1000);
+    setTimeout(() => showToast("💕 Bem-vinda ao seu espaço especial, Gisele! 💕"), 1000);
 
     // ===== ANIMAÇÕES =====
     function initializeAnimations() {
         profileCard.style.opacity   = "0";
         profileCard.style.transform = "translateY(50px)";
-
         setTimeout(() => {
             profileCard.style.transition = "all 0.8s ease-out";
             profileCard.style.opacity    = "1";
@@ -233,15 +306,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 <textarea name="message" placeholder="Escreva sua mensagem aqui..." required maxlength="500"></textarea>
                 <button type="submit" class="action-button primary">💕 Enviar Mensagem</button>
             </form>
-            <div style="margin-top: 15px; text-align:center;">
-                <button type="button" class="action-button secondary" id="btnVerMensagens">
-                    📝 Ver Mensagens
-                </button>
+            <div style="margin-top:15px; text-align:center;">
+                <button type="button" class="action-button secondary" id="btnVerMensagens">📝 Ver Mensagens</button>
             </div>
         `);
 
         modal.querySelector("#btnVerMensagens").addEventListener("click", showMessagesModal);
-
         modal.querySelector("#messageForm").addEventListener("submit", async function (e) {
             e.preventDefault();
             await handleMessageSubmit(this);
@@ -261,9 +331,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!container) return;
 
         if (msgs.length === 0) {
-            container.innerHTML = `<p style="text-align:center; color:var(--light-text-color); font-style:italic;">
-                Nenhuma mensagem ainda. 💕
-            </p>`;
+            container.innerHTML = `<p style="text-align:center;color:var(--light-text-color);font-style:italic;">Nenhuma mensagem ainda. 💕</p>`;
         } else {
             container.innerHTML = `
                 <div class="messages-container">
@@ -277,17 +345,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                     `).join("")}
                 </div>
-                <div style="text-align:center; margin-top:20px;">
-                    <button class="action-button secondary" id="btnLimpar" style="font-size:0.9em;">
-                        🗑️ Limpar Todas
-                    </button>
+                <div style="text-align:center;margin-top:20px;">
+                    <button class="action-button secondary" id="btnLimpar" style="font-size:0.9em;">🗑️ Limpar Todas</button>
                 </div>
             `;
-
             document.getElementById("btnLimpar").addEventListener("click", async () => {
                 if (confirm("Tem certeza? Esta ação não pode ser desfeita.")) {
                     await messageSystem.clearAllMessages();
-                    showSuccessMessage("Mensagens removidas! 🗑️");
+                    showToast("Mensagens removidas! 🗑️");
                     document.querySelector(".modal")?.remove();
                 }
             });
@@ -298,7 +363,6 @@ document.addEventListener("DOMContentLoaded", function () {
     async function handleMessageSubmit(form) {
         const name    = form.querySelector("[name='name']").value.trim();
         const message = form.querySelector("[name='message']").value.trim();
-
         if (!message) return;
 
         const btn = form.querySelector("button[type='submit']");
@@ -312,60 +376,76 @@ document.addEventListener("DOMContentLoaded", function () {
             btn.style.backgroundColor = "#27ae60";
             setTimeout(() => {
                 document.querySelector(".modal")?.remove();
-                showSuccessMessage("Mensagem enviada com amor! 💕");
+                showToast("Mensagem enviada com amor! 💕");
             }, 1200);
         } else {
             btn.textContent           = "❌ Erro ao enviar";
             btn.style.backgroundColor = "#e74c3c";
             btn.disabled              = false;
-            showSuccessMessage("Erro! Verifique o BIN ID e API KEY do JSONBin.", true);
+            showToast("Erro! Verifique o BIN ID e API KEY do JSONBin.", true);
         }
     }
 
-    // ===== MODAL: GALERIA =====
+    // ===== MODAL: GALERIA — categorias =====
     function showGalleryModal() {
-        createModal("Galeria Romântica", `
+        createModal("Galeria Romântica 📷", `
             <div class="gallery-grid">
                 ${GALLERY_CONFIG.categories.map((cat, i) => `
-                    <div class="gallery-item" onclick="showGalleryDetail(${i})">
-                        ${cat.emoji} ${cat.title}
+                    <div class="gallery-item" data-cat="${i}">
+                        <span>${cat.emoji}</span>
+                        <span>${cat.title}</span>
                     </div>
                 `).join("")}
             </div>
         `);
+
+        // bind nos itens da galeria após inserir no DOM
+        document.querySelectorAll(".gallery-item[data-cat]").forEach(el => {
+            el.addEventListener("click", () => {
+                showGalleryDetail(parseInt(el.dataset.cat));
+            });
+        });
     }
 
+    // ===== MODAL: GALERIA — fotos de uma categoria =====
     window.showGalleryDetail = function (index) {
         const cat = GALLERY_CONFIG.categories[index];
+
         const imagesHTML = cat.images?.length
             ? `<div class="gallery-images">
-                ${cat.images.map(src => `
+                ${cat.images.map((src, i) => `
                     <img src="${src}" alt="${cat.title}" class="gallery-image"
-                         onclick="showFullImage('${src}')">
+                         data-index="${i}" data-cat="${index}">
                 `).join("")}
                </div>`
-            : `<p style="text-align:center; font-style:italic; color:var(--light-text-color);">
-                📷 Adicione imagens no GALLERY_CONFIG do script.js
+            : `<p style="text-align:center;font-style:italic;color:var(--light-text-color);">
+                   📷 Nenhuma imagem nesta categoria.
                </p>`;
 
-        createModal(`${cat.emoji} ${cat.title}`, `
-            <p style="font-size:1.1em; line-height:1.8; color:var(--text-color); margin-bottom:20px;">
-                ${cat.description}
-            </p>
+        const modal = createModal("", `
+            <button class="btn-back-gallery" id="btnBackGallery">&#8592; Todas as categorias</button>
+            <h2 style="color:var(--primary-color);font-family:'Playfair Display',serif;margin:0 0 8px;">
+                ${cat.emoji} ${cat.title}
+            </h2>
+            <p style="font-size:1em;color:var(--light-text-color);margin-bottom:16px;">${cat.description}</p>
             ${imagesHTML}
-            <div style="text-align:center; margin-top:20px;">
-                <button class="action-button primary"
-                    onclick="document.querySelector('.modal').remove()">💕 Fechar</button>
-            </div>
         `);
-    };
 
-    window.showFullImage = function (src) {
-        createModal("", `
-            <div style="text-align:center;">
-                <img src="${src}" style="max-width:100%; max-height:70vh; border-radius:10px;">
-            </div>
-        `);
+        // voltar às categorias
+        modal.querySelector("#btnBackGallery").addEventListener("click", () => {
+            modal.remove();
+            showGalleryModal();
+        });
+
+        // abrir lightbox ao clicar numa foto
+        modal.querySelectorAll(".gallery-image").forEach(img => {
+            img.addEventListener("click", () => {
+                const fotos = cat.images;
+                const idx   = parseInt(img.dataset.index);
+                modal.remove();                    // fecha o modal da categoria
+                abrirLightbox(fotos, idx, index);  // abre o lightbox
+            });
+        });
     };
 
     // ===== MODAL GENÉRICO =====
@@ -377,7 +457,7 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.innerHTML = `
             <div class="modal-content">
                 <span class="close">&times;</span>
-                ${title ? `<h2 style="color:var(--primary-color); font-family:'Playfair Display',serif; margin-bottom:20px;">${title}</h2>` : ""}
+                ${title ? `<h2 style="color:var(--primary-color);font-family:'Playfair Display',serif;margin-bottom:20px;">${title}</h2>` : ""}
                 ${content}
             </div>
         `;
@@ -392,15 +472,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ===== TOAST =====
-    function showSuccessMessage(text, isError = false) {
+    function showToast(text, isError = false) {
         const div = document.createElement("div");
         div.style.cssText = `
-            position: fixed; top: 20px; right: 20px;
-            background: linear-gradient(135deg, ${isError ? "#e74c3c, #c0392b" : "#27ae60, #2ecc71"});
-            color: white; padding: 15px 25px; border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2); z-index: 1001;
-            font-family: 'Lora', serif; max-width: 300px;
-            animation: slideInRight 0.5s ease-out;
+            position:fixed; top:20px; right:20px;
+            background:linear-gradient(135deg,${isError ? "#e74c3c,#c0392b" : "#27ae60,#2ecc71"});
+            color:white; padding:15px 25px; border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.2); z-index:3000;
+            font-family:'Lora',serif; max-width:300px;
+            animation:slideInRight 0.5s ease-out;
         `;
         div.textContent = text;
         document.body.appendChild(div);
@@ -416,7 +496,7 @@ document.addEventListener("DOMContentLoaded", function () {
         for (let i = 0; i < 8; i++) {
             setTimeout(() => createFloatingHeart(
                 rect.left + rect.width / 2,
-                rect.top + rect.height / 2
+                rect.top  + rect.height / 2
             ), i * 100);
         }
     }
@@ -483,37 +563,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const style = document.createElement("style");
         style.textContent = `
             @keyframes slideInRight {
-                from { transform: translateX(100%); opacity: 0; }
-                to   { transform: translateX(0);    opacity: 1; }
+                from { transform:translateX(100%); opacity:0; }
+                to   { transform:translateX(0);    opacity:1; }
             }
             @keyframes slideOutRight {
-                from { transform: translateX(0);    opacity: 1; }
-                to   { transform: translateX(100%); opacity: 0; }
+                from { transform:translateX(0);    opacity:1; }
+                to   { transform:translateX(100%); opacity:0; }
             }
-            .profile-details p { cursor: pointer; transition: all 0.3s ease; }
-            .profile-details p:hover { background-color: rgba(255,107,107,0.05); border-radius: 8px; padding: 5px; }
-            .action-button { position: relative; overflow: hidden; }
-            .action-button::before {
-                content: ""; position: absolute; top: 50%; left: 50%;
-                width: 0; height: 0; background: rgba(255,255,255,0.3);
-                border-radius: 50%; transform: translate(-50%,-50%); transition: all 0.6s ease;
-            }
-            .action-button:active::before { width: 300px; height: 300px; }
-            .messages-container { max-height: 400px; overflow-y: auto; margin: 20px 0; }
-            .message-item {
-                background: #f8f9fa; border-left: 4px solid var(--primary-color);
-                padding: 15px; margin-bottom: 15px; border-radius: 8px; transition: transform 0.2s ease;
-            }
-            .message-item:hover { transform: translateX(5px); }
-            .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-            .message-header strong { color: var(--primary-color); font-family: "Playfair Display", serif; }
-            .message-date { font-size: 0.8em; color: var(--light-text-color); }
-            .message-content { color: var(--text-color); line-height: 1.6; }
-            .gallery-images { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin: 20px 0; }
-            .gallery-image { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; cursor: pointer; transition: transform 0.3s ease; border: 2px solid var(--border-color); }
-            .gallery-image:hover { transform: scale(1.05); border-color: var(--primary-color); }
-            .message-form input { padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; font-family: "Lora", serif; font-size: 1em; width: 100%; box-sizing: border-box; margin-bottom: 5px; }
-            .message-form input:focus { outline: none; border-color: var(--primary-color); }
+            .profile-details p { cursor:pointer; }
+            .profile-details p:hover { background-color:rgba(255,107,107,0.05); border-radius:8px; padding:5px; }
         `;
         document.head.appendChild(style);
     }
