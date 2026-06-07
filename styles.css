@@ -1,19 +1,18 @@
-/* Importação de fontes para um toque mais romântico */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:wght@400;700&display=swap');
 
 :root {
-    --primary-color: #ff6b6b; /* Rosa avermelhado suave */
-    --secondary-color: #ffb8b8; /* Rosa claro */
-    --text-color: #4a4a4a; /* Cinza escuro para texto */
-    --light-text-color: #6a6a6a; /* Cinza um pouco mais claro */
-    --bg-color: #fcebeb; /* Fundo rosa bem suave */
-    --card-bg: #ffffff; /* Fundo do cartão branco */
-    --border-color: #ffdada; /* Borda suave */
+    --primary-color: #ff6b6b;
+    --secondary-color: #ffb8b8;
+    --text-color: #4a4a4a;
+    --light-text-color: #6a6a6a;
+    --bg-color: #fcebeb;
+    --card-bg: #ffffff;
+    --border-color: #ffdada;
     --shadow-color: rgba(0, 0, 0, 0.08);
 }
 
 body {
-    font-family: 'Lora', serif; /* Fonte serifada para um toque clássico e romântico */
+    font-family: 'Lora', serif;
     line-height: 1.6;
     margin: 0;
     padding: 20px;
@@ -23,6 +22,7 @@ body {
     align-items: center;
     min-height: 100vh;
     color: var(--text-color);
+    box-sizing: border-box;
 }
 
 .profile-card {
@@ -31,6 +31,7 @@ body {
     box-shadow: 0 10px 30px var(--shadow-color);
     padding: 30px;
     max-width: 600px;
+    width: 100%;
     text-align: center;
     border: 1px solid var(--border-color);
     overflow: hidden;
@@ -38,14 +39,11 @@ body {
     z-index: 1;
 }
 
-/* Efeito sutil de brilho no fundo do card */
 .profile-card::before {
     content: '';
     position: absolute;
-    top: -50px;
-    left: -50px;
-    width: 200px;
-    height: 200px;
+    top: -50px; left: -50px;
+    width: 200px; height: 200px;
     background: radial-gradient(circle, var(--secondary-color) 0%, transparent 70%);
     opacity: 0.15;
     border-radius: 50%;
@@ -56,10 +54,8 @@ body {
 .profile-card::after {
     content: '';
     position: absolute;
-    bottom: -50px;
-    right: -50px;
-    width: 180px;
-    height: 180px;
+    bottom: -50px; right: -50px;
+    width: 180px; height: 180px;
     background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
     opacity: 0.1;
     border-radius: 50%;
@@ -67,28 +63,21 @@ body {
     z-index: -1;
 }
 
-.profile-header {
-    margin-bottom: 25px;
-    position: relative;
-}
+.profile-header { margin-bottom: 25px; position: relative; }
 
 .profile-picture {
-    width: 150px;
-    height: 150px;
+    width: 150px; height: 150px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid var(--primary-color);
-    box-shadow: 0 0 0 8px var(--secondary-color); /* Anel externo */
+    box-shadow: 0 0 0 8px var(--secondary-color);
     margin-bottom: 20px;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, filter 0.3s ease;
 }
-
-.profile-picture:hover {
-    transform: scale(1.05);
-}
+.profile-picture:hover { transform: scale(1.05); }
 
 .profile-name {
-    font-family: 'Playfair Display', serif; /* Fonte elegante para o nome */
+    font-family: 'Playfair Display', serif;
     font-size: 2.8em;
     color: var(--primary-color);
     margin: 10px 0 5px;
@@ -96,12 +85,7 @@ body {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
 }
 
-.profile-tagline {
-    font-size: 1.1em;
-    color: var(--light-text-color);
-    font-style: italic;
-    margin-top: 0;
-}
+.profile-tagline { font-size: 1.1em; color: var(--light-text-color); font-style: italic; margin-top: 0; }
 
 .profile-details {
     text-align: left;
@@ -116,6 +100,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
+    transition: all 0.3s ease;
 }
 
 .detail-label {
@@ -125,12 +110,10 @@ body {
     font-weight: 700;
 }
 
-.detail-value {
-    color: var(--text-color);
-}
+.detail-value { color: var(--text-color); }
 
 .profile-bio {
-    background-color: #fff5f5; /* Fundo suave para a bio */
+    background-color: #fff5f5;
     border-left: 5px solid var(--primary-color);
     padding: 15px 20px;
     border-radius: 8px;
@@ -163,10 +146,21 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
 }
-
+.action-button::before {
+    content: "";
+    position: absolute; top: 50%; left: 50%;
+    width: 0; height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%,-50%);
+    transition: all 0.6s ease;
+}
+.action-button:active::before { width: 300px; height: 300px; }
 .action-button:hover {
-    background-color: #e04a4a; /* Tom mais escuro no hover */
+    background-color: #e04a4a;
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
@@ -177,73 +171,42 @@ body {
     color: var(--primary-color);
     box-shadow: none;
 }
-
 .action-button.secondary:hover {
     background-color: var(--primary-color);
     color: white;
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* Responsividade básica */
-@media (max-width: 768px) {
-    .profile-card {
-        padding: 20px;
-        margin: 10px;
-    }
-
-    .profile-name {
-        font-size: 2.2em;
-    }
-
-    .profile-picture {
-        width: 120px;
-        height: 120px;
-    }
-
-    .action-button {
-        padding: 10px 20px;
-        font-size: 1em;
-    }
-
-    .profile-footer {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-/* Estilos adicionais para funcionalidades JavaScript */
+/* =====================
+   MODAL — overlay com scroll
+   ===================== */
 .modal {
     display: none;
     position: fixed;
     z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    inset: 0;
+    background-color: rgba(0,0,0,0.78);
     backdrop-filter: blur(5px);
+    overflow-y: auto;          /* <-- scroll quando conteúdo é grande */
+    padding: 24px 16px;
+    box-sizing: border-box;
 }
 
 .modal-content {
     background: white;
-    margin: 5% auto;
+    margin: 0 auto;
     padding: 30px;
     border-radius: 15px;
-    width: 90%;
-    max-width: 600px;
+    width: 100%;
+    max-width: 680px;
     position: relative;
     animation: modalSlideIn 0.3s ease-out;
+    box-sizing: border-box;
 }
 
 @keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-40px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .close {
@@ -253,12 +216,13 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: color 0.3s ease;
+    line-height: 1;
 }
+.close:hover { color: var(--primary-color); }
 
-.close:hover {
-    color: var(--primary-color);
-}
-
+/* =====================
+   GALERIA — categorias
+   ===================== */
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -275,16 +239,184 @@ body {
     justify-content: center;
     color: var(--text-color);
     font-weight: 600;
-    transition: transform 0.3s ease;
+    font-size: 0.95em;
+    text-align: center;
+    padding: 8px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
     border: 2px solid var(--border-color);
+    box-sizing: border-box;
 }
-
 .gallery-item:hover {
     transform: scale(1.05);
     border-color: var(--primary-color);
 }
 
+/* =====================
+   GALERIA — fotos dentro da categoria
+   ===================== */
+.gallery-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.gallery-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid var(--border-color);
+}
+.gallery-image:hover {
+    transform: scale(1.04);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 14px rgba(255,107,107,0.3);
+}
+
+/* botão voltar às categorias */
+.btn-back-gallery {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-family: 'Lora', serif;
+    font-size: 1em;
+    cursor: pointer;
+    padding: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    transition: opacity 0.2s;
+}
+.btn-back-gallery:hover { opacity: 0.7; }
+
+/* =====================
+   LIGHTBOX
+   ===================== */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    inset: 0;
+    background-color: rgba(0,0,0,0.93);
+    backdrop-filter: blur(8px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.lightbox.ativo { display: flex; }
+
+.lightbox-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.lightbox-back {
+    background: rgba(255,255,255,0.13);
+    border: 1.5px solid rgba(255,255,255,0.28);
+    color: white;
+    border-radius: 30px;
+    padding: 7px 18px;
+    font-size: 0.9em;
+    cursor: pointer;
+    font-family: 'Lora', serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s ease;
+}
+.lightbox-back:hover { background: var(--primary-color); border-color: var(--primary-color); }
+
+.lightbox-counter {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.88em;
+    font-family: 'Lora', serif;
+}
+
+.lightbox-close {
+    background: rgba(255,255,255,0.13);
+    border: 1.5px solid rgba(255,255,255,0.28);
+    color: white;
+    border-radius: 50%;
+    width: 34px; height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+.lightbox-close:hover { background: #e04a4a; border-color: #e04a4a; }
+
+.lightbox-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    padding: 70px 16px 20px;
+    box-sizing: border-box;
+}
+
+.lightbox-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: min(78vw, 620px);
+}
+
+.lightbox-inner img {
+    max-width: 100%;
+    max-height: 72vh;
+    border-radius: 12px;
+    object-fit: contain;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+    display: block;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.lightbox-caption {
+    color: rgba(255,255,255,0.75);
+    font-family: 'Lora', serif;
+    font-size: 0.9em;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.lightbox-nav {
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: white;
+    border-radius: 50%;
+    width: 52px; height: 52px;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+}
+.lightbox-nav:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* =====================
+   MENSAGENS
+   ===================== */
 .message-form {
     display: flex;
     flex-direction: column;
@@ -300,19 +432,31 @@ body {
     font-family: 'Lora', serif;
     font-size: 1em;
     transition: border-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
-
 .message-form input:focus,
-.message-form textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-}
+.message-form textarea:focus { outline: none; border-color: var(--primary-color); }
+.message-form textarea { resize: vertical; min-height: 100px; }
 
-.message-form textarea {
-    resize: vertical;
-    min-height: 100px;
+.messages-container { max-height: 380px; overflow-y: auto; margin: 20px 0; }
+.message-item {
+    background: #f8f9fa;
+    border-left: 4px solid var(--primary-color);
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
 }
+.message-item:hover { transform: translateX(5px); }
+.message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.message-header strong { color: var(--primary-color); font-family: 'Playfair Display', serif; }
+.message-date { font-size: 0.8em; color: var(--light-text-color); }
+.message-content { color: var(--text-color); line-height: 1.6; }
 
+/* =====================
+   CORAÇÕES
+   ===================== */
 .floating-hearts {
     position: fixed;
     pointer-events: none;
@@ -321,15 +465,29 @@ body {
     font-size: 20px;
     animation: floatUp 3s ease-out forwards;
 }
-
 @keyframes floatUp {
-    0% {
-        opacity: 1;
-        transform: translateY(0) rotate(0deg);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-100px) rotate(360deg);
-    }
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(-120px) rotate(360deg); }
 }
 
+/* =====================
+   RESPONSIVIDADE
+   ===================== */
+@media (max-width: 600px) {
+    body { padding: 12px; align-items: flex-start; }
+
+    .profile-card { padding: 20px 16px; }
+    .profile-name { font-size: 1.9em; }
+    .profile-picture { width: 110px; height: 110px; }
+
+    .action-button { padding: 10px 18px; font-size: 0.95em; }
+    .profile-footer { flex-direction: column; gap: 10px; }
+
+    .gallery-images { grid-template-columns: repeat(2, 1fr); }
+
+    .lightbox-nav { width: 38px; height: 38px; font-size: 18px; }
+    .lightbox-inner { max-width: 84vw; }
+    .lightbox-inner img { max-height: 64vh; }
+
+    .modal-content { padding: 20px 16px; }
+}
